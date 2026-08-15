@@ -25,7 +25,7 @@
 ## 1. ハードウェア・半導体レイヤ (Hardware & Semiconductors)
 
 - GPU アーキテクチャ (NVIDIA Blackwell / Rubin 等) 【★★★☆☆】
-- TPU / NPU (Google TPU, Apple Neural Engine, スマホ/PC向けNPU) 【★★☆☆☆】
+- 統合グラフィックス & UMA (Apple Silicon UMA, AMD Strix Halo, Intel Arc Xe2) 【★★★☆☆】
 - カスタム ASIC (AWS Trainium/Inferentia, Meta MTIA, Microsoft Maia) 【★★☆☆☆】
 - メモリ帯域 & テクノロジー (HBM3e / HBM4, CXL, LPDDR5X) 【★★☆☆☆】
 - 次世代コンピューティング (光コンピューティング / 量子AI / Neuromorphic Chip) 【★☆☆☆☆】
