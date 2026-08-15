@@ -24,12 +24,15 @@
 
 ## 1. ハードウェア・半導体レイヤ (Hardware & Semiconductors)
 
-- GPU アーキテクチャ (NVIDIA Blackwell / Rubin 等) 【★★★☆☆】
-- 統合グラフィックス & UMA (Apple Silicon UMA, AMD Strix Halo, Intel Arc Xe2) 【★★★☆☆】
-- カスタム ASIC (AWS Trainium/Inferentia, Meta MTIA, Microsoft Maia) 【★★☆☆☆】
-- メモリ帯域 & テクノロジー (HBM3e / HBM4, CXL, LPDDR5X) 【★★☆☆☆】
-- 次世代コンピューティング (光コンピューティング / 量子AI / Neuromorphic Chip) 【★☆☆☆☆】
-- 省電力設計 & データセンター熱設計 (液冷システム / 電力グリッド問題) 【★☆☆☆☆】
+- AI と GPU・並列計算アーキテクチャ (CPU vs GPU, GEMM 行列積演算) 【★★★★☆】
+- 計算律速 vs メモリ帯域律速 (Compute-bound vs Memory-bound / Prefill & Decode ボトルネック) 【★★★★☆】
+- VRAM 容量・サイジング基準 & KV キャッシュ設計 (16GB / 24GB / 32GB / 48GB / 128GB+) 【★★★★☆】
+- NVIDIA GPU & エコシステム (GeForce RTX, RTX Ada, Blackwell, CUDA, TensorRT-LLM) 【★★★★☆】
+- 統合グラフィックス & UMA アーキテクチャ (Apple Silicon UMA, AMD Strix Halo, Intel Arc Xe2) 【★★★★☆】
+- AMD GPU & アクセラレータ (Radeon RX 7000/8000, Instinct MI300X, ROCm / HIP) 【★★★☆☆】
+- NPU & エッジ・オンデバイス AI (Apple Neural Engine, Qualcomm Snapdragon X, Intel/AMD NPU) 【★★★☆☆】
+- カスタム ASIC & クラウド専用アクセラレータ (Google TPU, AWS Trainium/Inferentia, Meta MTIA, Microsoft Maia) 【★★☆☆☆】
+- メモリ規格 & 帯域幅テクノロジー (HBM3e / HBM4, GDDR7, LPDDR5X, CXL) 【★★★☆☆】
 
 ## 2. インフラ・分散システムレイヤ (Infrastructure & Networking)
 

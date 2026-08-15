@@ -34,11 +34,11 @@ flowchart LR
     G14 --> G15["Lunar Lake (Core Ultra 2)<br>Arc 140V (Xe2 アーキテクチャ)<br>👉 8Bモデルが快適動作 ⭐"]
 ```
 
-| 世代・プロセッサ名 | 内蔵GPU名・アーキテクチャ | GPU AI演算性能 | メモリ帯域幅 | AI推論の実用性 |
+| 世代・プロセッサ名 | 内蔵GPU名・アーキテクチャ | GPU AI演算性能 | メモリ規格・伝送速度・帯域幅 | AI推論の実用性 |
 | :--- | :--- | :--- | :--- | :--- |
-| **従来の第11〜13世代**<br>(Core i5/i7/i9) | Intel Iris Xe / UHD | 〜5 TFLOPS<br>(AI拡張なし) | 約 40〜60 GB/s<br>(DDR4/DDR5) | ✕ 非推奨（動作しても極めて低速） |
-| **Core Ultra Series 1**<br>(Meteor Lake: 100系) | Intel Arc Graphics<br>(Xe-LPG 8コア) | 約 10〜13 TFLOPS | 約 70〜90 GB/s<br>(LPDDR5) | △ 3B〜7Bモデルが最低限動作（~10 tok/s） |
-| **Core Ultra Series 2**<br>(Lunar Lake: 200V系) ⭐ | **Intel Arc 140V / 130V**<br>(Xe2 アーキテクチャ) | **最大 67 TOPS (INT8)**<br>約 15 TFLOPS (FP16) | **約 136 GB/s**<br>(オンパッケージ LPDDR5X) | **◎ 3B〜8Bモデルが快適に動作（15〜40 tok/s）** |
+| **従来の第11〜13世代**<br>(Core i5/i7/i9) | Intel Iris Xe / UHD | 〜5 TFLOPS<br>(AI拡張なし) | **約 40〜60 GB/s**<br>(DDR4-3200 / DDR5-4800, 128-bit) | ✕ 非推奨（動作しても極めて低速） |
+| **Core Ultra Series 1**<br>(Meteor Lake: 100系) | Intel Arc Graphics<br>(Xe-LPG 8コア) | 約 10〜13 TFLOPS | **約 70〜90 GB/s**<br>(LPDDR5-6400 / 7467, 128-bit) | △ 3B〜7Bモデルが最低限動作（~10 tok/s） |
+| **Core Ultra Series 2**<br>(Lunar Lake: 200V系) ⭐ | **Intel Arc 140V / 130V**<br>(Xe2 アーキテクチャ) | **最大 67 TOPS (INT8)**<br>約 15 TFLOPS (FP16) | **約 136 GB/s**<br>(オンパッケージ **LPDDR5X-8533**, 128-bit) | **◎ 3B〜8Bモデルが快適に動作（15〜40 tok/s）** |
 
 ---
 

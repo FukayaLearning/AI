@@ -32,11 +32,11 @@ AMDは、高いハードウェアコストパフォーマンス（VRAM単価の�
 
 Radeonシリーズの最大の魅力は、**「大容量VRAMを低価格で入手できるコストパフォーマンス」** です。
 
-| モデル名 | VRAM容量 | メモリ帯域 | 実売価格帯 | NVIDIA同等VRAM製品との比較 |
+| モデル名 | VRAM容量・メモリ規格 | メモリ帯域幅<br>(ピン伝送速度 / バス幅) | 実売価格帯 | NVIDIA同等VRAM製品との比較 |
 | :--- | :--- | :--- | :--- | :--- |
-| **Radeon RX 7800 XT** | **16GB** GDDR6 | 624 GB/s | 7〜8万円 | RTX 4070 Ti Super（13万円〜）の約半額で16GB VRAMを確保 |
-| **Radeon RX 7900 XT** | **20GB** GDDR6 | 800 GB/s | 11〜13万円 | 20GB VRAMで32Bモデル（Q4）が余裕で動作 |
-| **Radeon RX 7900 XTX** ⭐ | **24GB** GDDR6 | **960 GB/s** | **14〜16万円** | **RTX 4090（30万円超）の半額で24GB VRAMを入手可能** |
+| **Radeon RX 7800 XT** | **16GB** GDDR6 | **624 GB/s** (19.5 Gbps / 256-bit) | 7〜8万円 | RTX 4070 Ti Super（13万円〜）の約半額で16GB VRAMを確保 |
+| **Radeon RX 7900 XT** | **20GB** GDDR6 | **800 GB/s** (20 Gbps / 320-bit) | 11〜13万円 | 20GB VRAMで32Bモデル（Q4）が余裕で動作 |
+| **Radeon RX 7900 XTX** ⭐ | **24GB** GDDR6 | **960 GB/s** (20 Gbps / 384-bit) | **14〜16万円** | **RTX 4090（30万円超）の半額で24GB VRAMを入手可能** |
 
 ---
 

@@ -98,6 +98,31 @@ $$\text{理論最大生成速度 (tokens/s)} = \frac{\text{メモリ帯域幅 (G
 > - **メモリ帯域 256 GB/s（AMD Strix Halo）**: 最大 $\approx 12.8 \text{ tokens/s}$
 > - **メモリ帯域 800 GB/s（Apple M3 Ultra）**: 最大 $\approx 40 \text{ tokens/s}$
 > - **メモリ帯域 1,008 GB/s（NVIDIA RTX 4090）**: 最大 $\approx 50 \text{ tokens/s}$
+> - **メモリ帯域 4,800 GB/s（NVIDIA H200 / HBM3e）**: 最大 $\approx 240 \text{ tokens/s}$
+
+---
+
+### 1.3 メモリ規格別の速度（帯域幅）と構造の比較
+
+AI処理において利用されるメモリは、接続方式や積層構造によって **帯域幅（転送速度）に100倍以上の差** が存在します。各GPU・チップ別の詳細なピン伝送速度やメモリ仕様は、各ベンダー別ドキュメント（[1.1 NVIDIA](1_1_nvidia.md) / [1.2 Apple](1_2_apple.md) / [1.3 AMD](1_3_amd.md) / [1.4 Intel](1_4_intel.md)）をご参照ください。
+
+```mermaid
+flowchart LR
+    DDR["DDR5 (PC一般)<br>~60-80 GB/s"] --> LPDDR["LPDDR5X (UMA / APU)<br>~136-256 GB/s"]
+    LPDDR --> AppleUMA["Apple UMA (Ultra)<br>~800 GB/s"]
+    AppleUMA --> GDDR["GDDR6X/GDDR7 (GPU)<br>~1.0 - 1.8 TB/s"]
+    GDDR --> HBM["HBM3e / HBM4 (データセンター)<br>~4.8 - 10+ TB/s ⭐"]
+```
+
+| メモリ規格 | 主な採用ハードウェア | バス幅 | 転送速度（帯域幅） | 最大容量目安 | 特徴とAIにおける役割 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **DDR5** | 一般的なデスクトップ/サーバーCPU | 128-bit | **約 60〜80 GB/s** | 128GB〜 | PCの標準メモリ。LLM推論には帯域不足 |
+| **LPDDR5X** | Intel Lunar Lake / AMD Strix Halo | 128〜256-bit | **約 136〜256 GB/s** | 32GB〜128GB | 薄型ノートやAPUでの統合メモリ（3B〜8B推論） |
+| **Apple UMA** | Apple M2/M3/M4 Max/Ultra | 512〜1024-bit | **約 300〜800 GB/s** | 64GB〜192GB+ | SoC直結の超広帯域統合メモリ（70B推論可能） |
+| **GDDR6X / GDDR7** | NVIDIA GeForce RTX 4090 / 5090 | 384〜512-bit | **1.0 〜 1.8 TB/s**<br>(1,008〜1,792 GB/s) | 24GB〜32GB | デスクトップGPUの最高峰。14B〜32B推論を爆速化 |
+| **HBM3** | NVIDIA H100 / AMD MI300X | 5120-bit | **3.35 TB/s** (3,350 GB/s) | 80GB〜192GB | 3D積層DRAM（TSV）。データセンター標準 |
+| **HBM3e** ⭐ | **NVIDIA H200 / B200 / MI325X** | 6144〜8192-bit | **4.8 〜 8.0 TB/s**<br>(4,800〜8,000 GB/s) | **141GB 〜 192GB** | **現在最先端**。超長文コンテキスト・70B超高速推論 |
+| **HBM4** 🚀 | **NVIDIA Rubin / 次世代ASIC** | **2048-bit/スタック** | **10 〜 15+ TB/s** | **288GB 〜 384GB+** | **次世代（2026年〜）**。TSMC先端ロジックダイ上に直積層 |
 
 ---
 
