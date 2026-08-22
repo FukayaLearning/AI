@@ -34,35 +34,16 @@
 - カスタム ASIC & クラウド専用アクセラレータ (Google TPU, AWS Trainium/Inferentia, Meta MTIA, Microsoft Maia) 【★★☆☆☆】
 - メモリ規格 & 帯域幅テクノロジー (HBM3e / HBM4, GDDR7, LPDDR5X, CXL) 【★★★☆☆】
 
-## 2. インフラ・分散システムレイヤ (Infrastructure & Networking)
+## 2. AIモデル・アーキテクチャ・形式レイヤ (Models, Architecture & Formats)
 
-- 大規模分散トレーニングクラスタ (RDMA, InfiniBand, RoCE) 【★★☆☆☆】
-- LLM 推論サービングエンジン (vLLM, TensorRT-LLM, TGI, SGLang) 【★★★★☆】
-- 分散並列手法 (Data Parallelism, Tensor Parallelism, Pipeline Parallelism, 3D Parallelism) 【★★★☆☆】
-- オンデバイス・エッジ推論環境 (ggml/llama.cpp, ONNX Runtime, CoreML) 【★★★★☆】
-- クラスターオーケストレーション & 障害耐性 (Kubeflow, Ray, Slurm) 【★★★☆☆】
+- モデル保存形式 & 実行ランタイム (Safetensors, GGUF/llama.cpp, MLX, AWQ/EXL2, ONNX, vLLM/Ollama) 【★★★★☆】
+- モデル種別 & モダリティ (LLM, SLM, 推論・思考モデル, VLM, 音声・動画, 世界モデル) 【★★★★★】
+- モデルアーキテクチャ (Decoder-Only Transformer, MoE, Mamba/SSM, ハイブリッド構成) 【★★★★☆】
+- 最新モデルクラス別ベンチマーク (Closed Weights, Open Weights: 400B+, 40B〜400B, Under 40B) 【★★★★☆】
+- モデル最適化 & 量子化技術 (INT4/FP4/AWQ/GGUF量子化, PEFT/LoRA, 知識蒸留, KVキャッシュ圧縮) 【★★★★☆】
+- 学習手法 & アライメント (事前学習, 合成データ, RLHF, DPO, GRPO) 【★★★☆☆】
 
-## 3. 基礎モデル & アーキテクチャレイヤ (Foundation Models & Architecture)
-
-- Transformer 拡張・代替アーキテクチャ (Mamba / SSM, RWKV, Linear Attention) 【★★★☆☆】
-- 大規模言語モデル (LLM: Decoder-Only, Encoder-Decoder) 【★★★★☆】
-- 推論・思考モデル (Reasoning / Thinking Models) 【★★★★★】
-- 小規模言語モデル (SLM: Small Language Models) 【★★★★☆】
-- ビジョン・言語・マルチモーダルモデル (VLM, Vision-Language-Action Models) 【★★★★☆】
-- 音声・音楽生成モデル (Voice Cloning, Real-time Audio-to-Audio) 【★★★☆☆】
-- 動画・3D・空間生成モデル (Diffusion Transformer / DiT, NeRF, 3D Gaussian Splatting) 【★★☆☆☆】
-- 世界モデル (World Models / 物理シミュレーション結合) 【★★☆☆☆】
-
-## 4. モデル最適化 & 学習手法レイヤ (Optimization & Training Methods)
-
-- 事前学習 (Pre-training: Synthetic Data / データ品質フィルタリング) 【★★☆☆☆】
-- 知識蒸留 (Knowledge Distillation) 【★★★☆☆】
-- 量子化技術 (Quantization: INT8, INT4, FP4, AWQ, GGUF, GPTQ, SmoothQuant) 【★★★★☆】
-- パラメータ効率的ファインチューニング (PEFT: LoRA, QLoRA, DoRA, Prefix Tuning) 【★★★★☆】
-- アライメント・人間からのフィードバック (RLHF, DPO, GRPO, KTO, RLAIF) 【★★★☆☆】
-- キャッシュ・メモリ最適化 (KV-Cache Compression, FlashAttention, PagedAttention) 【★★★★☆】
-
-## 5. プロンプト & コンテキストエンジニアリングレイヤ (Prompt & Context Engineering)
+## 3. プロンプト & コンテキストエンジニアリングレイヤ (Prompt & Context Engineering)
 
 - コンテキスト設計 (Context Window Management, System Prompt Architecture) 【★★★★★】
 - 構造化思考プロンプティング (Chain-of-Thought, Tree-of-Thoughts, Graph-of-Thoughts) 【★★★★★】
@@ -70,7 +51,7 @@
 - 出力フォーマット制約 (Structured Output / JSON Mode / Grammar-Guided Decoding) 【★★★★★】
 - 役割・ペルソナエンジニアリング (Persona & Guardrail Prompting) 【★★★★☆】
 
-## 6. 検索・知識データベース・ナレッジ活用レイヤ (RAG & Knowledge Data)
+## 4. 検索・知識データベース・ナレッジ活用レイヤ (RAG & Knowledge Data)
 
 - RAG アーキテクチャ (Naive RAG, Advanced RAG, Modular RAG, Self-RAG) 【★★★★★】
 - ベクトルデータベース (Pinecone, Qdrant, Milvus, Chroma, pgvector) 【★★★★★】
@@ -81,7 +62,7 @@
 - コードベースQ&A & リポジトリナレッジ化 (Repo Wiki / Contextual Codebase Indexing) 【★★★★★】
 - Deep Research / 自律型調査レポート生成 (Multi-Source Deep Research Agents) 【★★★★☆】
 
-## 7. AI エージェント & オーケストレーションレイヤ (Agent Systems & Orchestration)
+## 5. AI エージェント & オーケストレーションレイヤ (Agent Systems & Orchestration)
 
 - シングル・マルチエージェントフレームワーク (LangChain, LangGraph, LlamaIndex, AutoGen, CrewAI) 【★★★★★】
 - ツール利用 & 外部 API 連携 (Tool Use / Function Calling, Browser Use) 【★★★★★】
@@ -92,7 +73,7 @@
 - エージェント記憶システム (Short-Term, Long-Term Memory, Epistemic Memory) 【★★★★★】
 - エージェント計画・反射機能 (Planning, Reflection, Self-Correction Loops) 【★★★★★】
 
-## 8. アプリケーション & UI/UX・開発運用活用レイヤ (Application, Interface & DevSecOps)
+## 6. アプリケーション & UI/UX・開発運用活用レイヤ (Application, Interface & DevSecOps)
 
 - Generative UI / Dynamic UI (リアルタイムUI動的生成) 【★★★★★】
 - 対話型・マルチモーダル UI (リアルタイム音声会話, カメラ映像対話) 【★★★★☆】
@@ -104,7 +85,7 @@
 - AI Agent Workflows / ノンコード・ローコード統合 (n8n, Make, Zapier AI) 【★★★★☆】
 - 評価・オブザーバビリティ (LangSmith, Phoenix, Arize, Tracing) 【★★★★★】
 
-## 9. 産業別・ドメイン応用 & 業務システム組み込み (Domain & Enterprise Applications)
+## 7. 産業別・ドメイン応用 & 業務システム組み込み (Domain & Enterprise Applications)
 
 - エンタープライズ検索 & 社内アシスタント (Enterprise Search & Internal Q&A Bots) 【★★★★★】
 - カスタマーサポート自動化 & チケット自動解決 (Autonomous Support Agent & Ticketing) 【★★★★☆】
@@ -113,14 +94,14 @@
 - 製造・ロボティクス (Industrial Automation, Autonomous Robots) 【★★☆☆☆】
 - クリエイティブ・エンタメ (ゲームNPC, 映像制作自動化, 音楽制作) 【★★★☆☆】
 
-## 10. AI セキュリティ・ガバナンス・倫理レイヤ (Safety, Security & Governance)
+## 8. AI セキュリティ・ガバナンス・倫理レイヤ (Safety, Security & Governance)
 
 - ガードレールシステム (NeMo Guardrails, Llama Guard) 【★★★★☆】
 - セキュリティ脆弱性・攻撃手法 (Prompt Injection, Jailbreaking, Data Poisoning) 【★★★★★】
 - AI ガバナンス・合意形成 (AI Act, EU AI 規制, 著作権法・ライセンス) 【★★★☆☆】
 - 評価指標・ベンチマーク (MMLU, HumanEval, SWE-bench, LiveBench) 【★★★★☆】
 
-## 11. エンジニア市場・キャリア・組織構造 (Engineering Market & Workforce)
+## 9. エンジニア市場・キャリア・組織構造 (Engineering Market & Workforce)
 
 - 開発者の役割変化 (ループエンジニアリング, エージェントエンジニア, AI Architect) 【★★★★★】
 - 組織の AI ネイティブ化 (AI-First Organization, Shadow AI 対策) 【★★★★☆】
