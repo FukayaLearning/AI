@@ -1,6 +1,6 @@
 ---
 title: "10B〜40B AIモデル総合ベンチマーク比較マップ & 性能ポジショニングチャート"
-description: "10B〜40Bの中型オープンモデル（Qwen 3.8 27B, Muse Glimmer-30B, Gemma 4 31B, Ornith-1.0-35B, Qwen 3.6 35B-A3B等）におけるSWE-bench Verified / SWE-bench ProスコアとVRAM・パラメータ規模のポジショニングマップ。"
+description: "10B〜40Bの中型オープンモデル（Qwen 3.8 27B, Muse Glimmer-30B, Gemma 4 31B, Ornith 1.5-35B等）におけるSWE-bench Verified / SWE-bench ProスコアとVRAM・パラメータ規模のポジショニングマップ。"
 target_personas:
   persona-m365: "△"
   persona-local: "◎"
@@ -37,11 +37,10 @@ quadrantChart
     x-axis "25Bー26Bー27Bー28Bー29Bー30B" --> " ー31Bー32Bー33Bー34Bー35B"
     y-axis "0 ー 10 ー 20 ー 30 ー 40 ー 50" --> "ー 60 ー 70 ー 80 ー 90[%]"
 
-    "Qwen3.8-27B [61.7%] (27B, 61.7%)": [0.20, 0.62]
+    "Qwen 3.8-27B [61.7%] (27B, 61.7%)": [0.20, 0.62]
     "Muse Glimmer-30B [51.2%] (30B, 51.2%)": [0.50, 0.51]
     "Gemma4-31B [36.9%] (31B, 36.9%)": [0.60, 0.37]
-    "Ornith-1.0-35B [50.4%] (MoE 35B, 50.4%)": [0.98, 0.50]
-    "Qwen3.6-35B-A3B [49.5%] (MoE 35B, 49.5%)": [0.95, 0.49]
+    "Ornith 1.5-35B [50.4%] (MoE 35B, 50.4%)": [0.98, 0.50]
 ```
 
 ---
@@ -64,11 +63,10 @@ quadrantChart
     quadrant-4 30B〜35B 汎用マルチモーダル領域
     "Muse Glimmer-30B [76.0%] (30B, 76.0%)": [0.50, 0.76]
     "Gemma4-31B [66.6%] (31B, 66.6%)": [0.60, 0.67]
-    "Ornith-1.0-35B [75.6%] (MoE 35B, 75.6%)": [0.98, 0.76]
-    "Qwen3.6-35B-A3B [73.4%] (MoE 35B, 73.4%)": [0.95, 0.73]
+    "Ornith 1.5-35B [75.6%] (MoE 35B, 75.6%)": [0.98, 0.76]
 ```
 
-_(※ Qwen3.8-27B は SWE-bench Pro で 61.7% を記録し本クラス首位ですが、SWE-bench Verified スコアは未公表のため上記Verified個別チャートからは除外しています。)_
+_(※ Qwen 3.8-27B は SWE-bench Pro で 61.7% を記録し本クラス首位ですが、SWE-bench Verified スコアは未公表のため上記Verified個別チャートからは除外しています。)_
 
 ---
 
@@ -76,13 +74,12 @@ _(※ Qwen3.8-27B は SWE-bench Pro で 61.7% を記録し本クラス首位で�
 
 | モデル名称              | パラメータ規模 (総数 / 実効) | 必要VRAM目安 (Q4〜Q8) | SWE-bench Pro (public) | SWE-bench Verified | 主要ベンチマークスコア                                                                          | アーキテクチャ / 得意領域・選定ポイント                                                                                                               |
 | :---------------------- | :--------------------------- | :-------------------- | :--------------------: | :----------------: | :---------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🚀 **Qwen3.8-27B**      | **27B Dense**                | **16GB 〜 24GB**      |    **61.7%** (首位)    |         –          | ・LCB v6: **90.3%**<br>・GPQA: **89.2%**<br>・Term-Bench 2.1: **73.0%**<br>・OSWorld: **84.3%** | **本クラス最強の自律思考・コーディングモデル**。SWE-bench Proで61.7%を叩き出し、フロンティア級の推論・端末操作能力を発揮。                            |
+| 🚀 **Qwen 3.8-27B**     | **27B Dense**                | **16GB 〜 24GB**      |    **61.7%** (首位)    |         –          | ・LCB v6: **90.3%**<br>・GPQA: **89.2%**<br>・Term-Bench 2.1: **73.0%**<br>・OSWorld: **84.3%** | **本クラス最強の自律思考・コーディングモデル**。SWE-bench Proで61.7%を叩き出し、フロンティア級の推論・端末操作能力を発揮。                            |
 | ✨ **Muse Glimmer-30B** | **30B Dense**                | **18GB 〜 26GB**      |       **51.2%**        |  **76.0%** (首位)  | ・MCP Atlas: **75.5%**<br>・GPQA: 83.5%<br>・DeepSearch: **74.6%**<br>・SciCode: **43.6%**      | **MCP (Model Context Protocol) ツール連携特化**。外部ツール呼出（75.5%）や科学技術計算・ディープリサーチに優れたエージェントモデル。                  |
-| 🦅 **Ornith-1.0-35B**   | **総 35B / 活性化 3B (MoE)** | **20GB 〜 24GB**      |       **50.4%**        |     **75.6%**      | ・Term-Bench 2.1: **64.2%**<br>・Claw-Eval Avg: **69.8%**<br>・SWE Multilingual: **69.3%**      | **自己スキャフォールディング強化学習による自律コーディング特化MoE**。活性化3Bによる超高速推論と、端末自律操作（64.2%）・イシュー解決（75.6%）を両立。 |
-| ⚡ **Qwen3.6-35B-A3B**  | **総 35B / 活性化 3B (MoE)** | **20GB 〜 24GB**      |       **49.5%**        |     **73.4%**      | ・LCB v6: 80.4%<br>・GPQA: 86.0%<br>・QwenWebBench: 1397                                        | **MoE（総35B/推論時実効3B）アーキテクチャ**。VRAMは20GB台を要するものの、3B並の圧倒的な高速推論と高いコーディング精度を両立。                         |
+| 🦅 **Ornith 1.5-35B**   | **総 35B / 活性化 3B (MoE)** | **20GB 〜 24GB**      |       **50.4%**        |     **75.6%**      | ・Term-Bench 2.1: **64.2%**<br>・Claw-Eval Avg: **69.8%**<br>・SWE Multilingual: **69.3%**      | **自己スキャフォールディング強化学習による自律コーディング特化MoE**。活性化3Bによる超高速推論と、端末自律操作（64.2%）・イシュー解決（75.6%）を両立。 |
 | 💎 **Gemma4-31B**       | **31B Dense**                | **18GB 〜 28GB**      |       **36.9%**        |     **66.6%**      | ・GPQA: 85.7%<br>・LCB v6: 80.0%<br>・OmniDoc: 72.5%<br>・ScreenSpot Pro: **75.9%**             | Google製中型マルチモーダルモデル。UI画面認識（ScreenSpot 75.9%）・文書解析と高い安全性・プライバシー防御が特徴。                                      |
 
-??? tip "10B〜40B モデル選定と実務運用のポイント" - **最高峰の思考・自律コーディング**: `Qwen3.8-27B` が圧倒的です。24GB VRAM（RTX 3090/4090）に Q4_K_M または Q5_K_M でフルオフロードでき、商用APIに匹敵するローカル自律コーディングループ（Cline / Continue / Claude Code互換）を実現できます。- **自律端末操作・高速コーディングMoE**: `Ornith-1.0-35B` は自己スキャフォールディング強化学習により、Terminal-Bench 2.1（64.2%）や実務SWE-bench Verified（75.6%）で優れた性能を発揮し、推論時実効3Bの軽快な速度で動作します。- **MCP（Model Context Protocol）連携・リサーチ重視**: `Muse Glimmer-30B` は MCP Atlas 75.5% を誇り、ローカル環境で多数のMCPツールを繋いだ自律エージェント運用に最適です。- **高スループット・高速トークン生成**: `Qwen3.6-35B-A3B` はMoE構成により、リアルタイム補完や高速なエージェントステップ実行に適しています。
+??? tip "10B〜40B モデル選定と実務運用のポイント" - **最高峰の思考・自律コーディング**: `Qwen 3.8` (`Qwen 3.8-27B`) が圧倒的です。24GB VRAM（RTX 3090/4090）に Q4_K_M または Q5_K_M でフルオフロードでき、商用APIに匹敵するローカル自律コーディングループ（Cline / Continue / Claude Code互換）を実現できます。- **自律端末操作・高速コーディングMoE**: `Ornith 1.5` (`Ornith 1.5-35B`) は自己スキャフォールディング強化学習により、Terminal-Bench 2.1（64.2%）や実務SWE-bench Verified（75.6%）で優れた性能を発揮し、推論時実効3Bの軽快な速度で動作します。- **MCP（Model Context Protocol）連携・リサーチ重視**: `Muse Glimmer-30B` は MCP Atlas 75.5% を誇り、ローカル環境で多数のMCPツールを繋いだ自律エージェント運用に最適です。
 
 ---
 
@@ -91,7 +88,7 @@ _(※ Qwen3.8-27B は SWE-bench Pro で 61.7% を記録し本クラス首位で�
 他クラスのベンチマーク比較および包括的データは以下を参照してください。
 
 - 🐣 **[10B以下小型オープンモデル ポジショニングマップ (Under 10B)](2_A_Benchmark_graph_Unser10B.md)**
-- 🚀 **[ローカル・中小型オープンモデル一覧 (Open Weights Under 40B)](Benchmark_Open_Weights_Under_40B.md)**
-- 🐎 **[中〜大型オープンモデル (Open Weights 40B〜400B)](Benchmark_Open_Weights_40B_to_400B.md)**
-- 🐘 **[超大型オープンモデル (Open Weights Over 400B)](Benchmark_Open_Weights_Over_400B.md)**
-- 🔒 **[クローズド重みモデル (Closed Weights Benchmark)](Benchmark_Closed_Weights.md)**
+- 🚀 **[ローカル・中小型オープンモデル一覧 (Open Weights Under 40B)](benchmark/Benchmark_Open_Weights_Under_40B.md)**
+- 🐎 **[中〜大型オープンモデル (Open Weights 40B〜400B)](benchmark/Benchmark_Open_Weights_40B_to_400B.md)**
+- 🐘 **[超大型オープンモデル (Open Weights Over 400B)](benchmark/Benchmark_Open_Weights_Over_400B.md)**
+- 🔒 **[クローズド重みモデル (Closed Weights Benchmark)](benchmark/Benchmark_Closed_Weights_Flash.md)**

@@ -169,7 +169,7 @@ flowchart TD
         O3["オープン Under 40B (中小型)"] -->|ローカル 8GB〜24GB VRAM| BO3["ローカル/小型モデル選定"]
     end
 
-    click BC "benchmark/Benchmark_Closed_Weights.md" "クローズドモデル選定詳細"
+    click BC "benchmark/Benchmark_Closed_Weights_Flash.md" "クローズドモデル選定詳細"
     click BO1 "benchmark/Benchmark_Open_Weights_Over_400B.md" "400B+モデル選定詳細"
     click BO2 "benchmark/Benchmark_Open_Weights_40B_to_400B.md" "40B〜400Bモデル選定詳細"
     click BO3 "benchmark/Benchmark_Open_Weights_Under_40B.md" "40B未満モデル選定詳細"
@@ -177,16 +177,18 @@ flowchart TD
 
 ### 📚 詳細ベンチマークドキュメント一覧
 
-- 📊 **[総合ベンチマーク比較マップ & ポジショニングチャート](benchmark/Benchmark_graph.md)**
-  - 全体像: クローズド vs オープンの知能・コスト・ハードウェア要件マトリクス
-- 🔒 **[クローズド重みモデル (Closed Weights Benchmark)](benchmark/Benchmark_Closed_Weights.md)**
-  - 対象: GPT-4o, Claude 3.7 Sonnet / 3.5 Haiku, Gemini 2.0 Flash / Pro, o1, o3-mini
+- 📊 **[10B以下小型オープンモデル ポジショニングマップ](2_A_Benchmark_graph_Unser10B.md)**
+  - 対象: Ornith 9B / Ornith 1.5, Qwen 3.5 9B, Gemma 4 E4B/E2B, DeepSeek-R1-Distill-7B 等
+- 📊 **[10B〜40B中型オープンモデル ポジショニングマップ](2_B_Benchmark_graph_Unser40B.md)**
+  - 対象: Qwen 3.8 (27B), Muse Glimmer-30B, Gemma 4 31B, Ornith 1.5 (35B MoE) 等
+- 🔒 **[クローズド重みモデル (Closed Weights Benchmark)](benchmark/Benchmark_Closed_Weights_Flash.md)**
+  - 対象: Claude Sonnet 5, Claude Haiku 5, Claude Fable 5, Opus-4.8, GPT 5.6 Luna, Gemini 3.7 Flash, Muse Spark 1.1, Qwen 3.8 Max
 - 🐘 **[超大型オープンモデル (Open Weights Over 400B)](benchmark/Benchmark_Open_Weights_Over_400B.md)**
-  - 対象: DeepSeek-V3 / R1 (671B MoE), Llama 3.1 405B 等
+  - 対象: Minimax-M3-428B, Nemotron 3 Ultra, GLM-5.3, Inkling, DeepSeek-V4-Pro Max, Kimi K3
 - 🐎 **[中〜大型オープンモデル (Open Weights 40B〜400B)](benchmark/Benchmark_Open_Weights_40B_to_400B.md)**
-  - 対象: Qwen 2.5 72B, Llama 3.3 70B, DeepSeek-R1-Distill-Llama-70B, Mixtral 8x22B
+  - 対象: Ornith 1.5 (397B), Laguna S 2.1, Minimax M2.7, Inkling-Small, DeepSeek V4 Flash, Tencent Hy3, MiMo V2.5, Qwen 3.8 397B-A17B
 - 🚀 **[ローカル・中小型オープンモデル (Open Weights Under 40B)](benchmark/Benchmark_Open_Weights_Under_40B.md)**
-  - 対象: DeepSeek-R1-Distill-Qwen (14B/32B), Qwen 2.5 (7B/14B/32B), Gemma 2 (9B/27B), Llama 3.2 (3B), Phi-4 (14B)
+  - 対象: Qwen 3.8 (27B), Muse Glimmer-30B, Gemma 4 (31B), Ornith 1.5 (35B MoE)
 
 ---
 

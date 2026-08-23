@@ -22,7 +22,7 @@ requirements:
 
 ## 1. 本シナリオの前提・ターゲット環境
 
-本シナリオは、最先端の商用フロンティアモデル（Claude 3.7 Sonnet, GPT-4o, Gemini 2.0 Flash）および自律型コーディングツール（Claude Code, Cursor, Windsurf, Antigravity等）を活用し、**仕様策定から実装、テスト、リファクタリング、MCP連携までを高度に自動化したい開発者** を対象としています。
+本シナリオは、最先端の商用フロンティアモデル（Claude Sonnet 5, Opus-4.8, GPT 5.6 Luna, Gemini 3.7 Flash）および自律型コーディングツール（Claude Code, Cursor, Windsurf, Antigravity等）を活用し、**仕様策定から実装、テスト、リファクタリング、MCP連携までを高度に自動化したい開発者** を対象としています。
 
 ### 想定環境と主な特徴
 - **利用可能ツール**: Claude Code, Cursor, Windsurf, Model Context Protocol (MCP), 各種LLM API
@@ -43,9 +43,9 @@ requirements:
 ```mermaid
 graph TD
     Task[開発タスクの投入] --> Check{タスクの複雑度}
-    Check -->|設計・複雑なリファクタリング・難関バグ| A[Claude 3.7 Sonnet<br>Extended Thinking 有効]
-    Check -->|高速な単体テスト作成・Lint修正| B[Gemini 2.0 Flash /<br>GPT-4o mini]
-    Check -->|UIデザイン・画面モックアップ| C[マルチモーダル対応モデル<br>Claude 3.7 / GPT-4o]
+    Check -->|設計・複雑なリファクタリング・難関バグ| A[Claude Sonnet 5 / Opus-4.8<br>Gemini 3.7 Flash (Thinking)]
+    Check -->|高速な単体テスト作成・Lint修正| B[Gemini 3.7 Flash (Instant) /<br>Claude Haiku 5]
+    Check -->|UIデザイン・画面モックアップ| C[マルチモーダル対応モデル<br>Claude Sonnet 5 / Gemini 3.7]
     
     A --> SWE[SWE 自律開発ループ実行]
     B --> SWE
@@ -53,9 +53,9 @@ graph TD
 ```
 
 - **用途別推奨モデル**:
-  - **アーキテクチャ設計・難関実装・コードレビュー**: `Claude 3.7 Sonnet` (Thinking Tokenを活用)
-  - **超高速テスト実行・単純な定型コード生成**: `Gemini 2.0 Flash` または `GPT-4o mini`
-  - **UI/UXスクリーンショット解析・画像入力**: `Claude 3.7 Sonnet` / `GPT-4o`（詳細は [マルチモーダルモデル](../2_models/2_3_multimodal.md) 参照）
+  - **アーキテクチャ設計・難関実装・コードレビュー**: `Claude Sonnet 5` / `Opus-4.8` / `Gemini 3.7 Flash` (Extended Thinkingを活用)
+  - **超高速テスト実行・単純な定型コード生成**: `Gemini 3.7 Flash` (非思考モード) または `Claude Haiku 5`
+  - **UI/UXスクリーンショット解析・画像入力**: `Claude Sonnet 5` / `Gemini 3.7 Flash`（詳細は [マルチモーダルモデル](../2_models/2_3_multimodal.md) 参照）
 
 ---
 

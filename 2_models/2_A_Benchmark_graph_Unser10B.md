@@ -57,7 +57,7 @@ quadrantChart
 | 🦙 **Llama 3.2 3B**           | 3.2B Dense                   | 2024年末/2025年 | 2GB 〜 3GB            |     **18.0%**      | Meta製エントリーSLM。要約・軽量チャット向け                                                                                 |
 | 💧 **Lfm 2.5 2.6B**           | **2.6B (LFM)**               | **2026年1月**   | **約 2GB**            |      **8.5%**      | Liquid AI製ハイブリッドモデル。超長文RAG・エッジ超低遅延向け（※開発元よりエージェントコーディング用途は非推奨）             |
 
-??? tip "10B以下モデル選定のポイント" - **自律エージェント・実務コーディング重視**: `Ornith 9B` または `Qwen 3.5 9B` が圧倒的なスコアを記録しており、8GB〜16GB VRAMのコンシューマPC・Macで本格的な自律リファクタリングが可能です。- **エッジ・マルチモーダル・省リソース**: `Gemma 4 E4B/E2B` は総パラメータ数に対して推論時の計算効率が高く、音声・画像入力を含む軽量アシスタントに最適です。- **長文要約・RAG特化**: `Lfm 2.5 2.6B` は長文コンテキスト処理に優れますが、複数ファイルにまたがるコード修正タスクには適していません。
+??? tip "10B以下モデル選定のポイント" - **自律エージェント・実務コーディング重視**: `Ornith 9B / Ornith 1.5` または `Qwen 3.5 9B` が圧倒的なスコアを記録しており、8GB〜16GB VRAMのコンシューマPC・Macで本格的な自律リファクタリングが可能です。自己スキャフォールディング強化学習により、小型ながら端末操作やテスト修正を自律完結できます。- **エッジ・マルチモーダル・省リソース**: `Gemma 4 E4B/E2B` は総パラメータ数に対して推論時の計算効率が高く、音声・画像入力を含む軽量アシスタントに最適です。- **長文要約・RAG特化**: `Lfm 2.5 2.6B` は長文コンテキスト処理に優れますが、複数ファイルにまたがるコード修正タスクには適していません。
 
 ---
 
@@ -65,7 +65,7 @@ quadrantChart
 
 より大規模なモデル群のベンチマーク・VRAMサイジング・料金比較は以下を参照してください。
 
-- 🚀 **[ローカル・中小型オープンモデル (Open Weights Under 40B)](Benchmark_Open_Weights_Under_40B.md)**
-- 🐎 **[中〜大型オープンモデル (Open Weights 40B〜400B)](Benchmark_Open_Weights_40B_to_400B.md)**
-- 🐘 **[超大型オープンモデル (Open Weights Over 400B)](Benchmark_Open_Weights_Over_400B.md)**
-- 🔒 **[クローズド重みモデル (Closed Weights Benchmark)](Benchmark_Closed_Weights.md)**
+- 🚀 **[ローカル・中小型オープンモデル (Open Weights Under 40B)](benchmark/Benchmark_Open_Weights_Under_40B.md)**
+- 🐎 **[中〜大型オープンモデル (Open Weights 40B〜400B)](benchmark/Benchmark_Open_Weights_40B_to_400B.md)**
+- 🐘 **[超大型オープンモデル (Open Weights Over 400B)](benchmark/Benchmark_Open_Weights_Over_400B.md)**
+- 🔒 **[クローズド重みモデル (Closed Weights Benchmark)](benchmark/Benchmark_Closed_Weights_Flash.md)**

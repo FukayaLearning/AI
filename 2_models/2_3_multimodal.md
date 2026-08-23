@@ -8,7 +8,7 @@ target_personas:
 requirements:
   hardware: "VLMローカル実行時はVRAM 16GB〜24GB推奨（クラウドAPI利用時は制限なし）"
   tools: ["Qwen2.5-VL", "Llama-3.2-Vision", "Whisper", "Hugging Face"]
-  cloud_api: "GPT-4o, Claude 3.7 Sonnet, Gemini 2.0 Flash 等のマルチモーダルAPI"
+  cloud_api: "GPT-4o, Claude 3.7 Sonnet, Gemini 3.7 Flash 等のマルチモーダルAPI"
 ---
 
 !!! info "対象読者ガイド"
@@ -82,7 +82,7 @@ flowchart LR
 
 初期のVLM（$224 \times 224$ や $336 \times 336$ 固定）では、微細な文字（OCR）や図面、高精細なUIボタンを認識できませんでした。
 
-現代の先端VLM（Qwen2.5-VL, Claude 3.5/3.7, GPT-4o）は **「動的解像度分割（AnyRes）」** を採用しています。
+現代の先端VLM（Qwen2.5-VL, Claude 3.5/3.7, GPT-4o, Gemini 3.7 Flash）は **「動的解像度分割（AnyRes）」** を採用しています。
 
 ```mermaid
 flowchart TD
@@ -104,7 +104,7 @@ flowchart TD
 
 従来の「音声認識 (ASR: Whisper) $\rightarrow$ LLM $\rightarrow$ 音声合成 (TTS)」という多段カスケード構成は、遅延（1〜2秒以上）が大きく自然な会話が困難でした。
 
-- **Native Audio-to-Audio (GPT-4o, Gemini Live, Moshi)**:
+- **Native Audio-to-Audio (GPT-4o, Gemini 3.7 / Live, Moshi)**:
   音声を直接連続トークンとしてモデルに入力し、音声トークンを直接出力。
   - **超低遅延（100〜300ms）**: 人間同士の会話と同等のレスポンス速度。
   - **非言語情報の保持**: ユーザーの話し方のトーン、感情、ためらい、相槌（Barge-in: 割り込み発話）をリアルタイムに処理。

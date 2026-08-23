@@ -8,7 +8,7 @@ target_personas:
 requirements:
   hardware: "ローカル推論モデル実行時はVRAM 16GB〜24GB推奨（DeepSeek-R1-Distill 14B/32B）"
   tools: ["llama.cpp", "Ollama", "vLLM", "Hugging Face"]
-  cloud_api: "OpenAI o1/o3-mini, DeepSeek-R1 API, Gemini 2.0 Flash Thinking"
+  cloud_api: "OpenAI o1/o3-mini, DeepSeek-R1 API, Gemini 3.7 Flash / 2.0 Flash Thinking"
 ---
 
 !!! info "対象読者ガイド"
@@ -90,10 +90,12 @@ flowchart TD
 
 | モデル | 提供形態 | 特徴・強み | ベストユースケース |
 | :--- | :--- | :--- | :--- |
+| **Gemini 3.7 Flash** | クラウドAPI | ハイブリッド思考（Extended Thinking / 思考トークン予算の動的制御）に対応。超高速・低遅延と最高峰のマルチモーダル推論を両立 | リアルタイム対話・高度自律コーディング・マルチモーダル推論 |
 | **OpenAI o1 / o3-mini** | クローズドAPI | 最高峰のSTEM能力、推論労力（Reasoning Effort: Low/Medium/High）の制御が可能 | 難関アルゴリズム実装、論文査読、高度アーキテクチャ設計 |
 | **DeepSeek-R1** (671B MoE) | オープンウェイト / API | o1に匹敵する最高峰性能、完全オープンな重みと学習レシピ公開 | クラウドホスティング、社内専用推論基盤 |
-| **DeepSeek-R1-Distill-Qwen** (14B / 32B) | オープンウェイト (GGUF/MLX) | 671B R1の思考データを蒸留した小型モデル。単一GPU（RTX 3090/4090）やMacで実用動作 | **ローカル開発環境での難問解決・コード生成の決定版** |
-| **Gemini 2.0 Flash Thinking** | クラウドAPI | 思考モデルでありながら超低レイテンシ・マルチモーダル対応 | リアルタイム対話・マルチモーダル推論 |
+| **Qwen 3.8** (27B) | オープンウェイト (GGUF/MLX) | 24GB VRAM環境で最高峰の自律思考・コーディング性能（SWE-bench Pro: 61.7%, LCB v6: 90.3%）を発揮 | **ローカル環境（RTX 3090/4090）での自律エージェント・難関コード開発の決定版** |
+| **Ornith 1.5** (9B / 35B MoE) | オープンウェイト (GGUF/MLX) | 自己スキャフォールディング強化学習による自律コーディング・端末操作特化。省VRAM（実効3B〜9B）で高速動作 | ローカル端末自律操作（Terminal-Bench）、高速リファクタリング |
+| **DeepSeek-R1-Distill-Qwen** (14B / 32B) | オープンウェイト (GGUF/MLX) | 671B R1の思考データを蒸留した小型モデル。単一GPU（RTX 3090/4090）やMacで実用動作 | ローカル開発環境での難問解決・コード生成 |
 
 ---
 

@@ -41,19 +41,20 @@ requirements:
 
 === "8GB VRAM (エントリー / 一般PC・Mac)"
     - **代表的なハードウェア**: NVIDIA RTX 3060 (8GB) / RTX 4060, Apple Silicon (16GB RAM)
-    - **推奨モデル規模**: 3B〜8Bクラス（Q4_K_M 量子化）
+    - **推奨モデル規模**: 3B〜9Bクラス（Q4_K_M 量子化）
     - **推奨モデル例**:
-      - タブ補完: `Qwen2.5-Coder-1.5B-Instruct` / `DeepSeek-Coder-1.3B`
-      - チャット・レビュー: `Qwen2.5-Coder-7B-Instruct (Q4_K_M)` / `Llama-3.2-3B-Instruct`
-    - **性能感・用途**: 単一関数の補完、軽量なコード説明、ワンショットでのバグ修正。コンテキスト長は 4k〜8k 推奨。
+      - 自律コーディング特化SLM: `Ornith 9B / Ornith 1.5 (9B)`（SWE-bench Verified 69.4%）
+      - チャット・汎用補完: `Qwen 3.5 9B` / `Qwen2.5-Coder-7B-Instruct (Q4_K_M)` / `Llama-3.2-3B-Instruct`
+    - **性能感・用途**: 単一関数の補完、軽量なコード説明、ワンショットでのバグ修正・自動リファクタリング。コンテキスト長は 4k〜16k 推奨。
 
 === "24GB VRAM (ハイエンド / RTX 3090/4090, Apple Silicon 32GB~)"
     - **代表的なハードウェア**: NVIDIA RTX 3090 / 4090 (24GB VRAM), Apple M2/M3/M4 Pro/Max (32GB〜64GB RAM)
-    - **推奨モデル規模**: 14B〜32Bクラス（Q4_K_M / Q8_0 量子化）、小型思考モデル
+    - **推奨モデル規模**: 14B〜35Bクラス（Q4_K_M / Q8_0 量子化）、自律コーディングMoE
     - **推奨モデル例**:
-      - コーディング主力: `Qwen2.5-Coder-14B-Instruct` / `Qwen2.5-Coder-32B-Instruct (Q4_K_M)`
-      - 思考・推論モデル: `DeepSeek-R1-Distill-Qwen-14B` / `DeepSeek-R1-Distill-Qwen-32B`
-    - **性能感・用途**: 本格的なリファクタリング、複数ファイルにまたがるコードベース理解、ローカルRAG、思考トークンを用いた難関バグ解析。
+      - 思考・自律コーディング最高峰: `Qwen 3.8 (27B)` (SWE-bench Pro 61.7%, LCB v6 90.3%)
+      - 高速自律コーディングMoE: `Ornith 1.5 (35B MoE / 活性化3B)` (SWE-bench Verified 75.6%)
+      - 思考・推論モデル: `DeepSeek-R1-Distill-Qwen-32B` / `DeepSeek-R1-Distill-Qwen-14B`
+    - **性能感・用途**: 本格的なリファクタリング、複数ファイルにまたがる自律開発ループ（Cline/Continue）、ローカルRAG、思考トークンを用いた難関バグ解析。
 
 === "96GB+ VRAM (ワークステーション / Mac Studio 128GB)"
     - **代表的なハードウェア**: Apple Mac Studio (M2/M3 Ultra 128GB/192GB), 複数枚GPU構成 (RTX 4090 24GB × 4, A100/H100 80GB)
@@ -67,13 +68,13 @@ requirements:
 
 ## 3. モデル選定戦略 & 量子化の最適化
 
-モデル選定の詳細は [Open Weights Under 40B ベンチマーク](../2_models/benchmark/Benchmark_Open_Weights_Under_40B.md) および [Open Weights 40B to 400B ベンチマーク](../2_models/benchmark/Benchmark_Open_Weights_40B_to_400B.md) を参照してください。
+モデル選定の詳細は [10B以下小型オープンモデル ポジショニングマップ](../2_models/2_A_Benchmark_graph_Unser10B.md)、[10B〜40B中型オープンモデル ポジショニングマップ](../2_models/2_B_Benchmark_graph_Unser40B.md) および [Open Weights Under 40B ベンチマーク](../2_models/benchmark/Benchmark_Open_Weights_Under_40B.md) を参照してください。
 
 ```mermaid
 graph TD
     A[手元のGPU VRAM容量] --> B{VRAM容量の判定}
-    B -->|8GB以下| C[7B未満小型モデル<br>Qwen 2.5 7B Q4 / Llama 3.2 3B]
-    B -->|16GB〜24GB| D[14B〜32B主力モデル<br>Qwen 2.5 14B/32B Q4 / DeepSeek-R1-Distill-14B]
+    B -->|8GB以下| C[小型自律SLM<br>Ornith 9B / Qwen 3.5 9B Q4]
+    B -->|16GB〜24GB| D[24GB最高峰モデル<br>Qwen 3.8 27B / Ornith 1.5 35B MoE]
     B -->|96GB以上| E[70B超ハイエンド<br>Llama 3.3 70B Q4 / Qwen 2.5 72B]
     
     C --> F[GGUF形式 / Q4_K_M量子化選定]
