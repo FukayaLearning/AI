@@ -1,0 +1,2165 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="なぜAIにGPUが必要なのか、計算律速とメモリ帯域律速のボトルネック、VRAMサイジング基準、主要ベンダー（NVIDIA, Apple, AMD, Intel）の特徴比較と選定マップを解説します。">
+      
+      
+        <meta name="author" content="sweet">
+      
+      
+      
+        <link rel="prev" href="../../scenarios/persona_cloud/">
+      
+      
+        <link rel="next" href="../1_1_nvidia/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>AIハードウェア入門：GPUの必要性・メモリ帯域・選定ガイド - AI技術・動向ナレッジベース</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#10-aigpu" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="AI技術・動向ナレッジベース" class="md-header__button md-logo" aria-label="AI技術・動向ナレッジベース" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI技術・動向ナレッジベース
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AIハードウェア入門：GPUの必要性・メモリ帯域・選定ガイド
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="ダークモードに切り替え"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードに切り替え" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="ライトモードに切り替え"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードに切り替え" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/FukayaLearning/AI" title="リポジトリへ" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    FukayaLearning/AI
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  ホーム
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Abstract/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  体系一覧 (Abstract)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../scenarios/persona_m365/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  実践シナリオブック
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  1. ハードウェア選定
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../2_models/2_0_introduction/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  2. モデル & アーキテクチャ
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../AGENTS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  運用・執筆規約
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AI技術・動向ナレッジベース" class="md-nav__button md-logo" aria-label="AI技術・動向ナレッジベース" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AI技術・動向ナレッジベース
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/FukayaLearning/AI" title="リポジトリへ" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    FukayaLearning/AI
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Abstract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    体系一覧 (Abstract)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    実践シナリオブック
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    実践シナリオブック
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/persona_m365/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M365 Copilot限定環境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/persona_local/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ローカルLLM環境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/persona_cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    高度クラウドエージェント環境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. ハードウェア選定
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1. ハードウェア選定
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要・基礎
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要・基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-aillmgpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. なぜAI（LLM）にGPUが必要なのか？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. なぜAI（LLM）にGPUが必要なのか？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-cpugpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 CPUとGPUの設計思想の違い
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-flopsmemory-bandwidth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 計算速度（FLOPS）とメモリ帯域（Memory Bandwidth）の決定的役割
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 計算速度（FLOPS）とメモリ帯域（Memory Bandwidth）の決定的役割">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        トークン生成速度（Decode）の計算式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 メモリ規格別の速度（帯域幅）と構造の比較
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-vram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. VRAM容量の重要性とサイジング基準
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 主要ベンダー別ハードウェア比較サマリー
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ハードウェア選定フローチャート &amp; ユースケース別推奨
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ベンダー別詳細ドキュメント一覧
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 関連ドキュメント・シナリオブック
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_1_nvidia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA GPU / CUDA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_2_apple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apple Silicon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_3_amd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AMD GPU / ROCm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_4_intel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intel GPU / NPU
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. モデル & アーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2. モデル & アーキテクチャ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_0_introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要・選定ガイド
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_1_architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2.1 モデルアーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_2_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2.2 保存形式 & ランタイム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_3_multimodal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2.3 マルチモーダル & 世界モデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_4_quantization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2.4 量子化技術徹底解説
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_5_reasoning_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2.5 推論・思考モデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_6_training_alignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2.6 学習手法・PEFT・アライメント
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ポジショニングマップ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ポジショニングマップ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_A_Benchmark_graph_Unser10B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10B以下小型オープンモデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/2_B_Benchmark_graph_Unser40B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10B〜40B中型オープンモデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    詳細ベンチマークテーブル
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    詳細ベンチマークテーブル
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/benchmark/Benchmark_Closed_Weights_Flash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    クローズド重みモデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/benchmark/Benchmark_Open_Weights_Under_40B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    40B未満オープンモデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/benchmark/Benchmark_Open_Weights_40B_to_400B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    40B〜400Bオープンモデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_models/benchmark/Benchmark_Open_Weights_Over_400B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    400B超オープンモデル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AGENTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    運用・執筆規約
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-aillmgpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. なぜAI（LLM）にGPUが必要なのか？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. なぜAI（LLM）にGPUが必要なのか？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-cpugpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 CPUとGPUの設計思想の違い
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-flopsmemory-bandwidth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 計算速度（FLOPS）とメモリ帯域（Memory Bandwidth）の決定的役割
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 計算速度（FLOPS）とメモリ帯域（Memory Bandwidth）の決定的役割">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        トークン生成速度（Decode）の計算式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 メモリ規格別の速度（帯域幅）と構造の比較
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-vram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. VRAM容量の重要性とサイジング基準
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 主要ベンダー別ハードウェア比較サマリー
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ハードウェア選定フローチャート &amp; ユースケース別推奨
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ベンダー別詳細ドキュメント一覧
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 関連ドキュメント・シナリオブック
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="admonition info">
+<p class="admonition-title">対象読者ガイド</p>
+<ul>
+<li>🏢 <strong>M365 Copilot</strong>: ○（ハードウェア基礎知識の把握に加え、<strong>社給PCが最新のIntel Core Ultra搭載機であれば機密データをクラウドに出さない完全オフラインのローカルAI活用も視野</strong>に入ります）</li>
+<li>💻 <strong>ローカルLLM</strong>: ◎（GPU/VRAMの選定基準、メモリ帯域の重要性、各社製品の比較と選定判断に直結）</li>
+<li>☁️ <strong>高度エージェント</strong>: ○（クラウドGPUインスタンス選定やインフラコスト見積もりの基礎として有用）</li>
+</ul>
+</div>
+<hr />
+<h1 id="10-aigpu">1.0 AIハードウェア入門：GPUの必要性・メモリ帯域・選定マップ</h1>
+<p>AI技術（特に大規模言語モデル：LLMや生成AI）の急速な進化は、半導体ハードウェアの進化と密接不可分です。本ドキュメントでは、「なぜAIにGPUが必要なのか」「メモリ帯域の重要性」「VRAMサイジングの基準」「各主要ベンダー（NVIDIA、Apple、AMD、Intel）の特徴比較」について、エンジニアの視点から体系的に解説します。</p>
+<hr />
+<h2 id="1-aillmgpu">1. なぜAI（LLM）にGPUが必要なのか？</h2>
+<h3 id="11-cpugpu">1.1 CPUとGPUの設計思想の違い</h3>
+<p>汎用プロセッサである <strong>CPU（Central Processing Unit）</strong> と、並列処理に特化した <strong>GPU（Graphics Processing Unit）</strong> は、根本的なアーキテクチャが異なります。</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph CPU["CPU (低遅延・逐次処理特化)"]
+        direction TB
+        C1["少数の強力なコア (4〜32コア)"]
+        C2["巨大なL1/L2/L3キャッシュ"]
+        C3["高度な分岐予測 &amp; アウトオブオーダー実行"]
+    end
+
+    subgraph GPU["GPU (高スループット・超並列演算特化)"]
+        direction TB
+        G1["数千〜数万の小型演算コア"]
+        G2["SIMD / SIMT (単一命令・複数データ並列実行)"]
+        G3["広帯域メモリ (GDDR / HBM) 直結"]
+    end</code></pre>
+<ul>
+<li><strong>CPU</strong>: 複雑な条件分岐、OSの制御、低レイテンシの逐次処理（シングルスレッド性能）を極限まで高める設計。</li>
+<li><strong>GPU</strong>: 単純な算術演算（加算・乗算）を数千〜数万のコアで一斉に同時実行する <strong>「超並列スループット（Throughput）」</strong> 特化の設計。</li>
+</ul>
+<p>AIモデル（ニューラルネットワーク / Transformer）の計算は、その大半が <strong>「行列積演算（GEMM: General Matrix Multiply）」</strong> です。数十億〜数千億個のパラメータ（重み）に対して同時に積和演算を行うため、圧倒的な並列処理能力を持つGPUが不可欠となります。</p>
+<hr />
+<h3 id="12-flopsmemory-bandwidth">1.2 計算速度（FLOPS）とメモリ帯域（Memory Bandwidth）の決定的役割</h3>
+<p>AI処理の性能特性を理解する上で最も重要なのが、計算機科学やハードウェア工学における <strong>「計算律速（Compute-bound）」</strong> と <strong>「メモリ帯域律速（Memory-bandwidth-bound）」</strong> の概念です。</p>
+<details class="tip">
+<summary>💡 用語解説：『律速（りっそく / Bound）』とは？</summary>
+<p>「<strong>律速（りっそく）</strong>」とは、一連の処理の中で<strong>全体の速度を決定づけている（律している）最大のボトルネック段階</strong>を指す専門用語です（英語の <em>Rate-determining</em> や <em>Bound</em> の定訳）。</p>
+<ul>
+<li><strong>計算律速（Compute-bound）</strong>: メモリ転送は間に合っており、<strong>演算器（GPUコア）の計算速度</strong>が限界となって全体の処理速度が決まっている状態。</li>
+<li><strong>メモリ帯域律速（Memory-bound）</strong>: 演算器には余力があるが、<strong>メモリからデータを読み出す速度（帯域幅）</strong>が遅くて足かせになっている状態。</li>
+</ul>
+</details>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Prefill["1. Prefill (プロンプト入力時)"]
+        direction TB
+        P1["入力トークン全体を一括行列演算"]
+        P2["演算密度が高い (計算律速 / Compute-bound)"]
+        P3["👉 演算性能 (TFLOPS) が効く"]
+    end
+
+    subgraph Decode["2. Decode (トークン逐次生成時)"]
+        direction TB
+        D1["1トークン出すたびに全モデル重みをVRAMから読み出す"]
+        D2["演算密度が低い (メモリ帯域律速 / Memory-bound)"]
+        D3["👉 メモリ帯域幅 (GB/s) が生成速度 (tok/s) を決定"]
+    end
+
+    Prefill --&gt; Decode</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">フェーズ</th>
+<th style="text-align: left;">処理内容</th>
+<th style="text-align: left;">律速要因（ボトルネック）</th>
+<th style="text-align: left;">影響するハードウェア指標</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Prefill（プロンプト処理）</strong></td>
+<td style="text-align: left;">入力された長文プロンプトを一括でエンコードする</td>
+<td style="text-align: left;"><strong>計算律速（Compute-bound）</strong></td>
+<td style="text-align: left;"><strong>TFLOPS / Tensorコア性能</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Decode（逐次トークン生成）</strong></td>
+<td style="text-align: left;">次の単語（トークン）を1つずつ順番に出力する</td>
+<td style="text-align: left;"><strong>メモリ帯域律速（Memory-bound）</strong></td>
+<td style="text-align: left;"><strong>メモリ帯域幅（Memory Bandwidth: GB/s）</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="decode">トークン生成速度（Decode）の計算式</h4>
+<p>LLMがバッチサイズ=1でトークンを1つ生成する際、モデルの重みパラメータ全体をメモリからロードする必要があります。</p>
+<p>$$\text{理論最大生成速度 (tokens/s)} = \frac{\text{メモリ帯域幅 (GB/s)}}{\text{モデルサイズ (GB)}}$$</p>
+<blockquote>
+<p><strong>例：32Bモデル（Q4量子化 = 約20GB）を動かす場合</strong>
+- <strong>メモリ帯域 136 GB/s（Intel Lunar Lake）</strong>: 最大 $\approx 6.8 \text{ tokens/s}$
+- <strong>メモリ帯域 256 GB/s（AMD Strix Halo）</strong>: 最大 $\approx 12.8 \text{ tokens/s}$
+- <strong>メモリ帯域 800 GB/s（Apple M3 Ultra）</strong>: 最大 $\approx 40 \text{ tokens/s}$
+- <strong>メモリ帯域 1,008 GB/s（NVIDIA RTX 4090）</strong>: 最大 $\approx 50 \text{ tokens/s}$
+- <strong>メモリ帯域 4,800 GB/s（NVIDIA H200 / HBM3e）</strong>: 最大 $\approx 240 \text{ tokens/s}$</p>
+</blockquote>
+<hr />
+<h3 id="13">1.3 メモリ規格別の速度（帯域幅）と構造の比較</h3>
+<p>AI処理において利用されるメモリは、接続方式や積層構造によって <strong>帯域幅（転送速度）に100倍以上の差</strong> が存在します。各GPU・チップ別の詳細なピン伝送速度やメモリ仕様は、各ベンダー別ドキュメント（<a href="../1_1_nvidia/">1.1 NVIDIA</a> / <a href="../1_2_apple/">1.2 Apple</a> / <a href="../1_3_amd/">1.3 AMD</a> / <a href="../1_4_intel/">1.4 Intel</a>）をご参照ください。</p>
+<pre class="mermaid"><code>flowchart LR
+    DDR["DDR5 (PC一般)&lt;br&gt;~60-80 GB/s"] --&gt; LPDDR["LPDDR5X (UMA / APU)&lt;br&gt;~136-256 GB/s"]
+    LPDDR --&gt; AppleUMA["Apple UMA (Ultra)&lt;br&gt;~800 GB/s"]
+    AppleUMA --&gt; GDDR["GDDR6X/GDDR7 (GPU)&lt;br&gt;~1.0 - 1.8 TB/s"]
+    GDDR --&gt; HBM["HBM3e / HBM4 (データセンター)&lt;br&gt;~4.8 - 10+ TB/s ⭐"]</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">メモリ規格</th>
+<th style="text-align: left;">主な採用ハードウェア</th>
+<th style="text-align: left;">バス幅</th>
+<th style="text-align: left;">転送速度（帯域幅）</th>
+<th style="text-align: left;">最大容量目安</th>
+<th style="text-align: left;">特徴とAIにおける役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>DDR5</strong></td>
+<td style="text-align: left;">一般的なデスクトップ/サーバーCPU</td>
+<td style="text-align: left;">128-bit</td>
+<td style="text-align: left;"><strong>約 60〜80 GB/s</strong></td>
+<td style="text-align: left;">128GB〜</td>
+<td style="text-align: left;">PCの標準メモリ。LLM推論には帯域不足</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LPDDR5X</strong></td>
+<td style="text-align: left;">Intel Lunar Lake / AMD Strix Halo</td>
+<td style="text-align: left;">128〜256-bit</td>
+<td style="text-align: left;"><strong>約 136〜256 GB/s</strong></td>
+<td style="text-align: left;">32GB〜128GB</td>
+<td style="text-align: left;">薄型ノートやAPUでの統合メモリ（3B〜8B推論）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Apple UMA</strong></td>
+<td style="text-align: left;">Apple M2/M3/M4 Max/Ultra</td>
+<td style="text-align: left;">512〜1024-bit</td>
+<td style="text-align: left;"><strong>約 300〜800 GB/s</strong></td>
+<td style="text-align: left;">64GB〜192GB+</td>
+<td style="text-align: left;">SoC直結の超広帯域統合メモリ（70B推論可能）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GDDR6X / GDDR7</strong></td>
+<td style="text-align: left;">NVIDIA GeForce RTX 4090 / 5090</td>
+<td style="text-align: left;">384〜512-bit</td>
+<td style="text-align: left;"><strong>1.0 〜 1.8 TB/s</strong><br>(1,008〜1,792 GB/s)</td>
+<td style="text-align: left;">24GB〜32GB</td>
+<td style="text-align: left;">デスクトップGPUの最高峰。14B〜32B推論を爆速化</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HBM3</strong></td>
+<td style="text-align: left;">NVIDIA H100 / AMD MI300X</td>
+<td style="text-align: left;">5120-bit</td>
+<td style="text-align: left;"><strong>3.35 TB/s</strong> (3,350 GB/s)</td>
+<td style="text-align: left;">80GB〜192GB</td>
+<td style="text-align: left;">3D積層DRAM（TSV）。データセンター標準</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HBM3e</strong> ⭐</td>
+<td style="text-align: left;"><strong>NVIDIA H200 / B200 / MI325X</strong></td>
+<td style="text-align: left;">6144〜8192-bit</td>
+<td style="text-align: left;"><strong>4.8 〜 8.0 TB/s</strong><br>(4,800〜8,000 GB/s)</td>
+<td style="text-align: left;"><strong>141GB 〜 192GB</strong></td>
+<td style="text-align: left;"><strong>現在最先端</strong>。超長文コンテキスト・70B超高速推論</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HBM4</strong> 🚀</td>
+<td style="text-align: left;"><strong>NVIDIA Rubin / 次世代ASIC</strong></td>
+<td style="text-align: left;"><strong>2048-bit/スタック</strong></td>
+<td style="text-align: left;"><strong>10 〜 15+ TB/s</strong></td>
+<td style="text-align: left;"><strong>288GB 〜 384GB+</strong></td>
+<td style="text-align: left;"><strong>次世代（2026年〜）</strong>。TSMC先端ロジックダイ上に直積層</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-vram">2. VRAM容量の重要性とサイジング基準</h2>
+<p>ローカルでLLMを実行する場合、<strong>「VRAM容量」は動作可能な最大モデルサイズ</strong> を決定します。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">VRAM容量</th>
+<th style="text-align: left;">動作可能なオープンモデル目安 (Q4〜Q8量子化)</th>
+<th style="text-align: left;">主な用途・適合環境</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>16GB</strong></td>
+<td style="text-align: left;">7B〜8B（Q8/FP16）、14B（Q4_K_M）</td>
+<td style="text-align: left;">個人開発、日常チャット、軽量コード補完</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>24GB</strong> ⭐</td>
+<td style="text-align: left;">14B〜32B（Q4_K_M）、DeepSeek-R1-Distill-32B（Q4）</td>
+<td style="text-align: left;"><strong>ローカル開発の標準</strong>。本格RAG・思考モデル実行</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>32GB〜48GB</strong></td>
+<td style="text-align: left;">32B（Q8）、Command-R 35B（Q4）、<strong>70B（Q4: 48GB時）</strong></td>
+<td style="text-align: left;">劣化なし32B推論、マルチモーダルVLM、70Bモデル実行</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>96GB〜128GB+</strong></td>
+<td style="text-align: left;"><strong>70B（Q8/FP16）</strong>、120B、大型MoEモデル</td>
+<td style="text-align: left;">クローズドモデルに迫る高度推論、パーソナル推論サーバー</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3">3. 主要ベンダー別ハードウェア比較サマリー</h2>
+<p>AIハードウェアを提供する主要4社の特徴・強み・位置づけは以下の通りです。</p>
+<pre class="mermaid"><code>flowchart TD
+    Vendor["主要ベンダーのポジショニング"]
+
+    Vendor --&gt; N["🟢 NVIDIA: デファクトスタンダード (最速・CUDA・研究)"]
+    Vendor --&gt; A["🍎 Apple: 圧倒的大容量UMA (Mac Studio / 70Bパーソナル推論)"]
+    Vendor --&gt; AMD["🔴 AMD: 高コスパVRAM &amp; 次世代APU Strix Halo (128GB UMA)"]
+    Vendor --&gt; I["🔵 Intel: 薄型軽量Windowsノート (Lunar Lake / 3B〜8B SLM)"]</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ベンダー / シリーズ</th>
+<th style="text-align: left;">メモリ構造</th>
+<th style="text-align: left;">最大VRAM目安</th>
+<th style="text-align: left;">主な強み</th>
+<th style="text-align: left;">主な制約・弱点</th>
+<th style="text-align: left;">詳細ガイド</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>🟢 NVIDIA</strong><br>(GeForce / RTX Ada)</td>
+<td style="text-align: left;">ディスクリート (GDDR6X/GDDR7)</td>
+<td style="text-align: left;">16GB〜48GB<br>(データセンター80GB+)</td>
+<td style="text-align: left;"><strong>圧倒的なCUDAエコシステム</strong>、最速の推論・学習速度</td>
+<td style="text-align: left;">VRAM単価が高い、消費電力大</td>
+<td style="text-align: left;"><a href="../1_1_nvidia/">👉 1.1 NVIDIA 詳細</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🍎 Apple</strong><br>(M-Series Ultra/Max)</td>
+<td style="text-align: left;">統合メモリ (UMA)<br>最大 800 GB/s</td>
+<td style="text-align: left;"><strong>最大 192GB+</strong></td>
+<td style="text-align: left;"><strong>70B超の巨大モデルを1台で実行可能</strong>、省電力・静音</td>
+<td style="text-align: left;">ピーク演算性能は低め、CUDA非互換</td>
+<td style="text-align: left;"><a href="../1_2_apple/">👉 1.2 Apple 詳細</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🔴 AMD</strong><br>(Radeon / Strix Halo)</td>
+<td style="text-align: left;">GDDR6 / 256-bit UMA<br>~256〜960 GB/s</td>
+<td style="text-align: left;">16GB〜24GB<br>(Strix Halo: <strong>128GB</strong>)</td>
+<td style="text-align: left;"><strong>高いVRAMコスパ</strong>、Windows/Linuxでの大容量APU</td>
+<td style="text-align: left;">ROCm環境の構築難易度（Windows等）</td>
+<td style="text-align: left;"><a href="../1_3_amd/">👉 1.3 AMD 詳細</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🔵 Intel</strong><br>(Core Ultra / Arc Xe2)</td>
+<td style="text-align: left;">オンパッケージ LPDDR5X<br>約 136 GB/s</td>
+<td style="text-align: left;">最大 32GB (共有)</td>
+<td style="text-align: left;"><strong>1kg台の薄型ノートで8Bモデルが動く</strong>、OpenVINO</td>
+<td style="text-align: left;">帯域制限のため14B以上のモデルは低速</td>
+<td style="text-align: left;"><a href="../1_4_intel/">👉 1.4 Intel 詳細</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4">4. ハードウェア選定フローチャート &amp; ユースケース別推奨</h2>
+<pre class="mermaid"><code>graph TD
+    Start["ハードウェア選定の開始"] --&gt; Q1{"用途・環境は何か？"}
+
+    Q1 --&gt;|"70B以上の巨大モデルを安価に動かしたい"| AppleAMD["Mac Studio (M2/M3 Ultra 128GB〜192GB)&lt;br&gt;または AMD Strix Halo (128GB)"]
+    Q1 --&gt;|"最速の推論・学習・CUDA開発・研究"| NVIDIA["NVIDIA GeForce (RTX 4090 / 5090)&lt;br&gt;または RTX 6000 Ada / H100"]
+    Q1 --&gt;|"薄型軽量Windowsノート単体でAIを使いたい"| IntelLunar["Intel Core Ultra 200V (Arc 140V)&lt;br&gt;(3B〜8Bモデルを外出先でオフライン実行)"]
+    Q1 --&gt;|"省電力・静音・常時稼働サーバー"| LowPower["RTX 4000 Ada (70W)&lt;br&gt;または Mac mini (M4 Pro)"]
+    Q1 --&gt;|"クラウドAPI利用メイン / M365"| CloudOnly["ハードウェア投資不要&lt;br&gt;(薄型ノートPC + クラウドエージェント)"]</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ユーザー要件</th>
+<th style="text-align: left;">おすすめハードウェア構成</th>
+<th style="text-align: left;">理由・ポイント</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>薄型モバイルノート単体でAI活用</strong><br>(3B〜8Bモデル)</td>
+<td style="text-align: left;"><strong>Intel Core Ultra 200V (Arc 140V 搭載機)</strong></td>
+<td style="text-align: left;">136GB/s帯域とXe2アーキテクチャにより、dGPUなしで8Bが実用速度</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>コスパ重視のローカルLLM入門</strong><br>(8B〜14Bモデル)</td>
+<td style="text-align: left;"><strong>NVIDIA RTX 4070 Ti Super / 4080 (16GB)</strong></td>
+<td style="text-align: left;">16GB VRAMにより14B Q4まで実用速度で動作。CUDA互換性完璧</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>本格的ローカルLLM / RAG / 思考モデル</strong><br>(14B〜32Bモデル)</td>
+<td style="text-align: left;"><strong>NVIDIA RTX 4090 (24GB) / RTX 5090 (32GB)</strong></td>
+<td style="text-align: left;">24GB〜32GB VRAM + 1TB/s超の帯域。圧倒的レスポンス（50+ tok/s）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>大容量70Bモデルの個人研究・推論</strong><br>(70B〜120Bモデル)</td>
+<td style="text-align: left;"><strong>Apple Mac Studio (M2/M3 Ultra 128GB〜192GB)</strong><br>または <strong>AMD Strix Halo (128GB)</strong></td>
+<td style="text-align: left;">GPU単体では高価な大容量VRAMを、UMAにより圧倒的低コストで確保</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>エンタープライズ・商用サービス構築</strong></td>
+<td style="text-align: left;"><strong>NVIDIA H100/H200 / クラウドGPUインスタンス</strong></td>
+<td style="text-align: left;">大規模分散推論、高スループット、SLA保証</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5">5. ベンダー別詳細ドキュメント一覧</h2>
+<ul>
+<li>🟢 <a href="../1_1_nvidia/"><strong>1.1 NVIDIA製GPU・VRAM選定とCUDAエコシステム</strong></a></li>
+<li>GeForce RTX 4080/4090/5080/5090、RTX Adaワークステーション、データセンター向け比較</li>
+<li>🍎 <a href="../1_2_apple/"><strong>1.2 Apple Silicon (M2/M3/M4 Ultra) と UMA アーキテクチャ解説</strong></a></li>
+<li>統合メモリ（UMA）、最大192GB+共有、MLX/Metalによる70Bモデル推論</li>
+<li>🔴 <a href="../1_3_amd/"><strong>1.3 AMD製GPU・次世代APU「Strix Halo」とROCm</strong></a></li>
+<li>Radeon RX 7900 XTX 24GBコスパ、Strix Halo 128GB UMA、ROCmの現状</li>
+<li>🔵 <a href="../1_4_intel/"><strong>1.4 Intel CPU 内蔵GPU（iGPU）のAI性能と活用ガイド</strong></a></li>
+<li>Core Ultra Lunar Lake Arc 140V Xe2、薄型WindowsノートでのSLM活用、OpenVINO</li>
+</ul>
+<hr />
+<h2 id="6">6. 関連ドキュメント・シナリオブック</h2>
+<ul>
+<li>📖 <a href="../../2_models/benchmark/Benchmark_Open_Weights_Under_40B/"><strong>オープンモデル ベンチマーク（Under 40B）</strong></a></li>
+<li>📖 <a href="../../2_models/benchmark/Benchmark_Open_Weights_40B_to_400B/"><strong>オープンモデル ベンチマーク（40B to 400B）</strong></a></li>
+<li>💻 <a href="../../scenarios/persona_local/"><strong>ローカルLLM 実践シナリオブック</strong></a></li>
+<li>📋 <a href="../../Abstract/"><strong>AI 関連技術・動向見出し一覧 (Abstract.md)</strong></a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
