@@ -29,18 +29,20 @@
   - ソフトウェアエンジニアとの関連度（★1〜★5）付きの全レイヤー見出し体系
 
 ### 主なカテゴリ
-- 🧠 [**models/ (基礎モデル・選定・ベンチマーク)**](models/)
-  - [Open Weights Under 40B ベンチマーク](models/benchmark/Benchmark_Open_Weights_Under_40B.md)
-  - [Open Weights 40B to 400B ベンチマーク](models/benchmark/Benchmark_Open_Weights_40B_to_400B.md)
-  - [Open Weights Over 400B ベンチマーク](models/benchmark/Benchmark_Open_Weights_Over_400B.md)
-  - [Closed Weights ベンチマーク](models/benchmark/Benchmark_Closed_Weights.md)
+- 🧠 [**2_models/ (基礎モデル・選定・ベンチマーク)**](2_models/2_0_introduction.md)
+  - [10B以下小型オープンモデル ポジショニングマップ](2_models/2_A_Benchmark_graph_Unser10B.md)
+  - [10B〜40B中型オープンモデル ポジショニングマップ](2_models/2_B_Benchmark_graph_Unser40B.md)
+  - [Open Weights Under 40B ベンチマーク](2_models/benchmark/Benchmark_Open_Weights_Under_40B.md)
+  - [Open Weights 40B to 400B ベンチマーク](2_models/benchmark/Benchmark_Open_Weights_40B_to_400B.md)
+  - [Open Weights Over 400B ベンチマーク](2_models/benchmark/Benchmark_Open_Weights_Over_400B.md)
+  - [Closed Weights ベンチマーク](2_models/benchmark/Benchmark_Closed_Weights_Flash.md)
 - ⚙️ [**1_hardware/ (ハードウェア・GPU・選定)**](1_hardware/1_0_introduction.md)
   - [1.0 ハードウェア入門・メモリ帯域・選定マップ](1_hardware/1_0_introduction.md)
   - [1.1 NVIDIA製GPU・VRAM選定とCUDAエコシステム](1_hardware/1_1_nvidia.md)
   - [1.2 Apple Silicon (M2/M3/M4 Ultra) と UMA](1_hardware/1_2_apple.md)
   - [1.3 AMD製GPU・次世代APU「Strix Halo」とROCm](1_hardware/1_3_amd.md)
   - [1.4 Intel CPU 内蔵GPU（iGPU）のAI性能と活用](1_hardware/1_4_intel.md)
-- 🛠️ [**11_engineering/ (エージェント・RAG・開発自動化)**](11_engineering/)
+- 🛠️ **11_engineering/ (エージェント・RAG・開発自動化)**
 
 ---
 

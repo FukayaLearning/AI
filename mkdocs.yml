@@ -1,0 +1,106 @@
+site_name: AI技術・動向ナレッジベース
+site_description: "ハードウェア、モデルアーキテクチャ、量子化、自律エージェント、および実践シナリオブックの体系的ドキュメント"
+site_author: "sweet"
+repo_name: "FukayaLearning/AI"
+repo_url: "https://github.com/FukayaLearning/AI"
+
+docs_dir: docs
+
+theme:
+  name: material
+  language: ja
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  palette:
+    # ライトモード
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: ダークモードに切り替え
+    # ダークモード
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: ライトモードに切り替え
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - tables
+  - attr_list
+  - md_in_html
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tilde
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js
+
+extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css
+
+nav:
+  - ホーム: index.md
+  - 体系一覧 (Abstract): Abstract.md
+  - 実践シナリオブック:
+      - M365 Copilot限定環境: scenarios/persona_m365.md
+      - ローカルLLM環境: scenarios/persona_local.md
+      - 高度クラウドエージェント環境: scenarios/persona_cloud.md
+  - 1. ハードウェア選定:
+      - 概要・基礎: 1_hardware/1_0_introduction.md
+      - NVIDIA GPU / CUDA: 1_hardware/1_1_nvidia.md
+      - Apple Silicon: 1_hardware/1_2_apple.md
+      - AMD GPU / ROCm: 1_hardware/1_3_amd.md
+      - Intel GPU / NPU: 1_hardware/1_4_intel.md
+  - 2. モデル & アーキテクチャ:
+      - 概要・選定ガイド: 2_models/2_0_introduction.md
+      - 2.1 モデルアーキテクチャ: 2_models/2_1_architecture.md
+      - 2.2 保存形式 & ランタイム: 2_models/2_2_format.md
+      - 2.3 マルチモーダル & 世界モデル: 2_models/2_3_multimodal.md
+      - 2.4 量子化技術徹底解説: 2_models/2_4_quantization.md
+      - 2.5 推論・思考モデル: 2_models/2_5_reasoning_models.md
+      - 2.6 学習手法・PEFT・アライメント: 2_models/2_6_training_alignment.md
+      - ポジショニングマップ:
+          - 10B以下小型オープンモデル: 2_models/2_A_Benchmark_graph_Unser10B.md
+          - 10B〜40B中型オープンモデル: 2_models/2_B_Benchmark_graph_Unser40B.md
+      - 詳細ベンチマークテーブル:
+          - クローズド重みモデル: 2_models/benchmark/Benchmark_Closed_Weights_Flash.md
+          - 40B未満オープンモデル: 2_models/benchmark/Benchmark_Open_Weights_Under_40B.md
+          - 40B〜400Bオープンモデル: 2_models/benchmark/Benchmark_Open_Weights_40B_to_400B.md
+          - 400B超オープンモデル: 2_models/benchmark/Benchmark_Open_Weights_Over_400B.md
+  - 運用・執筆規約: AGENTS.md

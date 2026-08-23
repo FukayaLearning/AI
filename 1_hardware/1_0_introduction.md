@@ -200,7 +200,7 @@ graph TD
 
 ## 6. 関連ドキュメント・シナリオブック
 
-- 📖 [**オープンモデル ベンチマーク（Under 40B）**](../models/benchmark/Benchmark_Open_Weights_Under_40B.md)
-- 📖 [**オープンモデル ベンチマーク（40B to 400B）**](../models/benchmark/Benchmark_Open_Weights_40B_to_400B.md)
+- 📖 [**オープンモデル ベンチマーク（Under 40B）**](../2_models/benchmark/Benchmark_Open_Weights_Under_40B.md)
+- 📖 [**オープンモデル ベンチマーク（40B to 400B）**](../2_models/benchmark/Benchmark_Open_Weights_40B_to_400B.md)
 - 💻 [**ローカルLLM 実践シナリオブック**](../scenarios/persona_local.md)
 - 📋 [**AI 関連技術・動向見出し一覧 (Abstract.md)**](../Abstract.md)
