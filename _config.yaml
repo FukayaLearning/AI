@@ -1,0 +1,8 @@
+title: My Docs
+baseurl: "/AI" # GitHub Pages の場合はリポジトリ名を入れることもある
+url: "https://fukayalearning.github.io" # 実際の公開 URL
+plugins:
+  - jekyll-mermaid-plugin
+markdown: kramdown
+kramdown:
+  input: GFM
